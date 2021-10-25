@@ -1,0 +1,340 @@
+{
+  "abi": {
+    "Harvest": [
+      {
+        "type": "constructor",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_dmtToken"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "NewFunder",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "funder",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "fundRate",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "NewOwner",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "oldOwner",
+            "indexed": true
+          },
+          {
+            "type": "address",
+            "name": "owner",
+            "indexed": true
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "NewPendingOwner",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "pendingOwner",
+            "indexed": true
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "RemoveFunder",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "funder",
+            "indexed": true
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "RewardRateUpdated",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "rewardRate",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "TokensClaimed",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "funder",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "amount",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "TokensWithdraw",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "dst",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "contract_balance",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "MAXREWARD",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "acceptOwner",
+        "constant": false,
+        "payable": false,
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "addFunder",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_funder"
+          },
+          {
+            "type": "uint256",
+            "name": "_fundRate"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "blocksPerYear",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "claim",
+        "constant": false,
+        "payable": false,
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "delFunder",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_funder"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "dmtToken",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "address"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "funders",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint256",
+            "name": "fundRate"
+          },
+          {
+            "type": "uint256",
+            "name": "totalClaimed"
+          },
+          {
+            "type": "uint256",
+            "name": "lastBlock"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "owner",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "address"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "pendingOwner",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "address"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "rewardRate",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "selfData",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_funder"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint256"
+          },
+          {
+            "type": "uint256"
+          },
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "setPendingOwner",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_pendingOwner"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "totalRate",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "withdraw",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "dst"
+          }
+        ],
+        "outputs": []
+      }
+    ]
+  },
+  "deployedContract": {
+    "harvest": {
+      "address": "0x766Ae0c90159F25150231206989744d702D98E50",
+      "contractName": "Harvest",
+      "_dmtToken": "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12"
+    }
+  }
+}
