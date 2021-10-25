@@ -12,8 +12,6 @@ const deployResult = require('./deploy_result');
 
 async function main() {
     const [deployer] = await ethers.getSigners();
-    const treasury = deployer;
-    const protocolAdmin = deployer;
     console.log("network:", hre.network.name);
     console.log("deployer:", deployer.address)
     console.log("deployer balance:", ethers.utils.formatEther((await deployer.getBalance())));
