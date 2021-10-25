@@ -18,6 +18,8 @@ contract Harvest {
   // 每个区块百分之一能获得的收益额度
   uint256 public rewardRate = MAXREWARD / 100 / blocksPerYear;
 
+  uint256 public totalRate;
+
   address public owner;
   address public pendingOwner;
   IERC20 public dmtToken;
@@ -62,12 +64,6 @@ contract Harvest {
     _;
   }
 
-  // 投资人不能重复
-  modifier funderDoesNotExist(address funder) {
-      require(funders[funder].lastBlock <= 0);
-      _;
-  }
-
   constructor(IERC20 _dmtToken) public {
     dmtToken = _dmtToken;
     owner = msg.sender;
@@ -93,18 +89,25 @@ contract Harvest {
   }
 
   // 添加投资人（钱包地址，分配比例、区块高度）
-  function addFunder(address _funder, uint256 _fundRate) external onlyOwner funderDoesNotExist(_funder) {
+  function addFunder(address _funder, uint256 _fundRate) external onlyOwner {
+    require(funders[_funder].lastBlock == 0, "funder exist already");
+    require(_fundRate > 0, "invalid fund rate");
+    require(totalRate.add(_fundRate) <= 100, "total rate over");
+
     Data storage funder = funders[_funder];
 
     funder.fundRate = _fundRate;
     funder.totalClaimed = 0;
     funder.lastBlock = block.number;
 
+    totalRate = totalRate.add(_fundRate);
     emit NewFunder(_funder, _fundRate);
   }
 
   // 删除投资人
   function delFunder(address _funder) external onlyOwner {
+    Data storage funder = funders[_funder];
+    totalRate = totalRate.sub(funder.fundRate);
     delete funders[_funder];
     emit RemoveFunder(_funder);
   }
@@ -141,7 +144,7 @@ contract Harvest {
       amount = totalUnclaimed;
     }
 
-    if(contract_balance <= amount ){
+    if(amount > contract_balance){
       amount = contract_balance;
     }
 
