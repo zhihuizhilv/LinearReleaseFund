@@ -159,9 +159,15 @@ contract Harvest {
   }
 
   // 提现全部余额到指定地址
-  function withdraw(address dst) external onlyOwner {
-    uint256 contract_balance = dmtToken.balanceOf( address(this) );
-    dmtToken.safeTransfer( dst, contract_balance );
-    emit TokensWithdraw(dst, contract_balance);
+  function withdraw(
+    address token,
+    address payable to,
+    uint amount
+  ) external onlyOwner {
+    if (token == address(0)) {
+      to.transfer(amount);
+    } else {
+      IERC20(token).safeTransfer(to, amount);
+    }
   }
 }
