@@ -9,26 +9,14 @@ contract Harvest {
   using SafeERC20 for IERC20;
   using SafeMath for uint256;
 
-  // 总量是1亿，直到领取完全结束
-  uint256 public MaxReward = 100000000 * (10**18);
+  // 总量剩余量，直到领取完全结束
+  uint256 public MaxReward = 89588844 * (10**18);
 
-  // 每天奖励数
-  uint256 public DayReward = MaxReward / 365;
-
-  // 已经释放天数
-  uint256 public DaysReleased = 38;
-
-  // 剩余释放天数
-  uint256 public RemainingReleaseDays = 365 - DaysReleased;
-
-  // 剩余奖励
-  uint256 public RemainingReward = DayReward * RemainingReleaseDays;
-
-  // 大概每秒产生3个区块，根据规则计算剩余天数产生的总区块数
-  uint public constant blocksPerYear = 60 * 60 * 24 * RemainingReleaseDays / 3;
+  // 大概每秒产生3个区块，根据规则计算327天产生的总区块数
+  uint public constant leftBlocks = 60 * 60 * 24 * 327 / 3;
 
   // 每个区块百分之一能获得的收益额度
-  uint256 public rewardRate = RemainingReward / 100 / blocksPerYear;
+  uint256 public rewardRate = MaxReward / 100 / leftBlocks;
 
   uint256 public totalRate;
 
@@ -51,7 +39,7 @@ contract Harvest {
   event RewardRateUpdated(uint256 rewardRate);
 
   event NewFunder(address indexed funder, uint256 fundRate);
-  
+
   event RemoveFunder(address indexed funder);
 
   event TokensClaimed(address indexed funder, uint256 amount);
@@ -127,7 +115,7 @@ contract Harvest {
   // 获取投资人相关数据
   function selfData(address _funder) external view returns (uint256, uint256, uint256) {
     Data storage funder = funders[_funder];
-    
+
     // 最多领取收益数
     uint256 self_max_reward = MaxReward.div(100).mul(funder.fundRate);
 
@@ -164,7 +152,7 @@ contract Harvest {
 
     funder.totalClaimed = funder.totalClaimed.add(amount);
     funder.lastBlock = block.number;
-    
+
     dmtToken.safeTransfer(msg.sender, amount);
 
     emit TokensClaimed(msg.sender, amount);

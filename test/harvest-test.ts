@@ -17,8 +17,8 @@ describe("Harvest", function () {
     let erc20Mock: Erc20Mock;
     let harvest: Harvest;
 
-    let MAXREWARD;
-    let blocksPerYear;
+    let MaxReward;
+    let leftBlocks;
     let rewardRate;
 
     before(async () => {
@@ -54,12 +54,12 @@ describe("Harvest", function () {
             console.log("erc20Mock:", erc20Mock.address);
             console.log("harvest:", harvest.address);
 
-            MAXREWARD = await harvest.MAXREWARD();
-            blocksPerYear = await harvest.blocksPerYear();
+            MaxReward = await harvest.MaxReward();
+            leftBlocks = await harvest.leftBlocks();
             rewardRate = await harvest.rewardRate();
 
-            console.log("MAXREWARD:", MAXREWARD.toString());
-            console.log("blocksPerYear:", blocksPerYear.toString());
+            console.log("MaxReward:", MaxReward.toString());
+            console.log("leftBlocks:", leftBlocks.toString());
             console.log("rewardRate:", rewardRate.toString());
         });
 
@@ -86,8 +86,8 @@ describe("Harvest", function () {
             console.log(selfDate[0].toString());
             console.log(selfDate[1].toString());
             console.log(selfDate[2].toString());
-            expect(selfDate[0]).eq(MAXREWARD);
-            expect(selfDate[1]).eq(MAXREWARD);
+            expect(selfDate[0]).eq(MaxReward);
+            expect(selfDate[1]).eq(MaxReward);
             expect(selfDate[2]).eq(BigNumber.from("0"));
             expect(await harvest.totalRate()).eq(BigNumber.from(100));
             expect(harvest.connect(owner).addFunder(await user2.getAddress(), 10)).revertedWith("total rate over");
@@ -100,8 +100,8 @@ describe("Harvest", function () {
             console.log("totalMaxReward:", selfDate[0].toString());
             console.log("totalUnclaimed:", selfDate[1].toString());
             console.log("claimable:", selfDate[2].toString());
-            expect(selfDate[0]).eq(MAXREWARD);
-            expect(selfDate[1]).eq(MAXREWARD);
+            expect(selfDate[0]).eq(MaxReward);
+            expect(selfDate[1]).eq(MaxReward);
 
             let claimablePerBlock = rewardRate.mul(100);
             expect(selfDate[2]).eq(claimablePerBlock.mul(10));
@@ -120,12 +120,12 @@ describe("Harvest", function () {
             expect(harvest.connect(user).claim()).revertedWith("Your receivable income is zero");
 
             // claim left all
-            let totalBlockNumbers = blocksPerYear;
-            if (claimablePerBlock.mul(totalBlockNumbers).lt(MAXREWARD)) {
+            let totalBlockNumbers = leftBlocks;
+            if (claimablePerBlock.mul(totalBlockNumbers).lt(MaxReward)) {
                 totalBlockNumbers = totalBlockNumbers.add(1);
             }
             console.log("totalBlockNumbers:", totalBlockNumbers.toLocaleString());
-            let leftTotalToken = MAXREWARD.sub(mintAmount);
+            let leftTotalToken = MaxReward.sub(mintAmount);
             console.log("leftTotalToken:", leftTotalToken.toString());
 
             await erc20Mock.connect(deployer).mint(harvest.address, leftTotalToken);
@@ -153,7 +153,7 @@ describe("Harvest", function () {
             console.log("harvest balance:", (await erc20Mock.balanceOf(harvest.address)).toString());
             console.log("user balance:", (await erc20Mock.balanceOf(await user.getAddress())).toString());
             expect(await erc20Mock.balanceOf(harvest.address)).eq(BigNumber.from("0"));
-            expect(await erc20Mock.balanceOf(await user.getAddress())).eq(MAXREWARD);
+            expect(await erc20Mock.balanceOf(await user.getAddress())).eq(MaxReward);
 
         });
     })
