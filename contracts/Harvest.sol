@@ -10,13 +10,25 @@ contract Harvest {
   using SafeMath for uint256;
 
   // 总量是1亿，直到领取完全结束
-  uint256 public MAXREWARD = 100000000 * (10**18);
+  uint256 public MaxReward = 100000000 * (10**18);
 
-  // 大概每秒产生3个区块，根据规则计算一年产生的总区块数
-  uint public constant blocksPerYear = 60 * 60 * 24 * 365 / 3;
+  // 每天奖励数
+  uint256 public DayReward = MaxReward / 365;
+
+  // 已经释放天数
+  uint256 public DaysReleased = 38;
+
+  // 剩余释放天数
+  uint256 public RemainingReleaseDays = 365 - DaysReleased;
+
+  // 剩余奖励
+  uint256 public RemainingReward = DayReward * RemainingReleaseDays;
+
+  // 大概每秒产生3个区块，根据规则计算剩余天数产生的总区块数
+  uint public constant blocksPerYear = 60 * 60 * 24 * RemainingReleaseDays / 3;
 
   // 每个区块百分之一能获得的收益额度
-  uint256 public rewardRate = MAXREWARD / 100 / blocksPerYear;
+  uint256 public rewardRate = RemainingReward / 100 / blocksPerYear;
 
   uint256 public totalRate;
 
@@ -117,7 +129,7 @@ contract Harvest {
     Data storage funder = funders[_funder];
     
     // 最多领取收益数
-    uint256 self_max_reward = MAXREWARD.div(100).mul(funder.fundRate);
+    uint256 self_max_reward = MaxReward.div(100).mul(funder.fundRate);
 
     // 未领取的收益数总数
     uint256 self_max_unclaimed = self_max_reward.sub(funder.totalClaimed);
@@ -135,7 +147,7 @@ contract Harvest {
     Data storage funder = funders[msg.sender];
     uint256 contract_balance = dmtToken.balanceOf( address(this) );
 
-    uint256 totalUnclaimed = MAXREWARD.div(100).mul(funder.fundRate).sub(funder.totalClaimed);
+    uint256 totalUnclaimed = MaxReward.div(100).mul(funder.fundRate).sub(funder.totalClaimed);
     uint256 diffBlock = block.number.sub(funder.lastBlock);
     uint256 amount = rewardRate.mul(funder.fundRate).mul(diffBlock);
 
@@ -159,15 +171,9 @@ contract Harvest {
   }
 
   // 提现全部余额到指定地址
-  function withdraw(
-    address token,
-    address payable to,
-    uint amount
-  ) external onlyOwner {
-    if (token == address(0)) {
-      to.transfer(amount);
-    } else {
-      IERC20(token).safeTransfer(to, amount);
-    }
+  function withdraw(address dst) external onlyOwner {
+    uint256 contract_balance = dmtToken.balanceOf( address(this) );
+    dmtToken.safeTransfer( dst, contract_balance );
+    emit TokensWithdraw(dst, contract_balance);
   }
 }
