@@ -10,7 +10,7 @@ contract Harvest {
   using SafeMath for uint256;
 
   // 总量剩余量，直到领取完全结束
-  uint256 public MaxReward = 35205512 * (10**18);
+  uint256 public MaxReward = 50000000 * (10**18);
 
   // 大概每秒产生3个区块，根据规则计算327天产生的总区块数
   uint public constant leftBlocks = 60 * 60 * 24 * 311 / 3;
