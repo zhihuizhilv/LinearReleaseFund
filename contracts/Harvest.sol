@@ -10,13 +10,10 @@ contract Harvest {
   using SafeMath for uint256;
 
   // 总量剩余量，直到领取完全结束
-  uint256 public MaxReward = 35205512 * (10**18);
-
-  // 大概每秒产生3个区块，根据规则计算327天产生的总区块数
-  uint public constant leftBlocks = 60 * 60 * 24 * 311 / 3;
+  uint256 public immutable MaxReward;
 
   // 每个区块百分之一能获得的收益额度
-  uint256 public rewardRate = MaxReward / 100 / leftBlocks;
+  uint256 public immutable rewardRate;
 
   uint256 public totalRate;
 
@@ -70,10 +67,14 @@ contract Harvest {
     _;
   }
 
-  constructor(IERC20 _dmtToken) public {
+  constructor(IERC20 _dmtToken, uint _totalReward, uint _totalDays) public {
+    MaxReward = _totalReward;
     dmtToken = _dmtToken;
     owner = msg.sender;
     pause = false;
+
+    uint totalBlocks = 1 days * _totalDays / 3;
+    rewardRate = _totalReward / 100 / totalBlocks;
 
     emit NewOwner(address(0), owner);
   }

@@ -9,6 +9,7 @@
 const hre = require("hardhat");
 const ethers = hre.ethers;
 const deployResult = require('./deploy_result');
+const deployConfig = require('./deploy_config')[hre.network.name];
 
 async function main() {
     const [deployer] = await ethers.getSigners();
@@ -19,8 +20,7 @@ async function main() {
     await deployResult.load();
 
     let HarvestFactory = await ethers.getContractFactory("Harvest");
-    let DMT = "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12";
-    let harvest = await HarvestFactory.deploy(DMT);
+    let harvest = await HarvestFactory.deploy(deployConfig.DMT, deployConfig.totalReward, deployConfig.totalDays);
     await harvest.deployed();
     deployResult.writeAbi("Harvest", HarvestFactory);
     deployResult.writeDeployedContract(
@@ -28,7 +28,9 @@ async function main() {
       harvest.address,
       "Harvest",
       {
-        _dmtToken: DMT,
+          _dmtToken: deployConfig.DMT,
+          _totalReward: deployConfig.totalReward,
+          _totalDays: deployConfig.totalDays,
       }
     );
 
