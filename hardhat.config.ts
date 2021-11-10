@@ -18,7 +18,6 @@ export default {
       gas: "auto",
     },
     heco: {
-      // url: process.env.HARDHAT_RPC || "https://http-mainnet-node.huobichain.com",
       url: process.env.HARDHAT_RPC || "https://http-mainnet.hecochain.com",
       gas: 8000000,
       accounts: [process.env.HARDHAT_PRIKEY]

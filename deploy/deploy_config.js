@@ -2,6 +2,12 @@ const hre = require("hardhat");
 const ethers = hre.ethers;
 
 module.exports = {
+    local: {
+        totalReward: ethers.utils.parseEther("35205512"),   // 总分发额度
+        totalDays: 311,                                     // 领取总天数
+        DMT: "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12",
+    },
+
     heco: {
         totalReward: ethers.utils.parseEther("35205512"),   // 总分发额度
         totalDays: 311,                                     // 领取总天数

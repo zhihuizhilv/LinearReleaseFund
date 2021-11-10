@@ -8,6 +8,14 @@
           {
             "type": "address",
             "name": "_dmtToken"
+          },
+          {
+            "type": "uint256",
+            "name": "_totalReward"
+          },
+          {
+            "type": "uint256",
+            "name": "_totalDays"
           }
         ]
       },
@@ -117,7 +125,7 @@
       },
       {
         "type": "function",
-        "name": "MAXREWARD",
+        "name": "MaxReward",
         "constant": true,
         "stateMutability": "view",
         "payable": false,
@@ -152,19 +160,6 @@
           }
         ],
         "outputs": []
-      },
-      {
-        "type": "function",
-        "name": "blocksPerYear",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
-          }
-        ]
       },
       {
         "type": "function",
@@ -241,6 +236,19 @@
       },
       {
         "type": "function",
+        "name": "pause",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "function",
         "name": "pendingOwner",
         "constant": true,
         "stateMutability": "view",
@@ -291,6 +299,19 @@
       },
       {
         "type": "function",
+        "name": "setPause",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "bool",
+            "name": "_pause"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
         "name": "setPendingOwner",
         "constant": false,
         "payable": false,
@@ -323,7 +344,15 @@
         "inputs": [
           {
             "type": "address",
-            "name": "dst"
+            "name": "token"
+          },
+          {
+            "type": "address",
+            "name": "to"
+          },
+          {
+            "type": "uint256",
+            "name": "amount"
           }
         ],
         "outputs": []
@@ -332,9 +361,14 @@
   },
   "deployedContract": {
     "harvest": {
-      "address": "0x766Ae0c90159F25150231206989744d702D98E50",
+      "address": "0x7C98a3B1445b4997a07785D22ED1f7712B7E6c28",
       "contractName": "Harvest",
-      "_dmtToken": "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12"
+      "_dmtToken": "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12",
+      "_totalReward": {
+        "type": "BigNumber",
+        "hex": "0x1d1f0ea133933f11200000"
+      },
+      "_totalDays": 311
     }
   }
 }
