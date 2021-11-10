@@ -10,10 +10,10 @@ contract Harvest {
   using SafeMath for uint256;
 
   // 总量剩余量，直到领取完全结束
-  uint256 public MaxReward = 89588844 * (10**18);
+  uint256 public MaxReward = 35205512 * (10**18);
 
   // 大概每秒产生3个区块，根据规则计算327天产生的总区块数
-  uint public constant leftBlocks = 60 * 60 * 24 * 327 / 3;
+  uint public constant leftBlocks = 60 * 60 * 24 * 311 / 3;
 
   // 每个区块百分之一能获得的收益额度
   uint256 public rewardRate = MaxReward / 100 / leftBlocks;
@@ -23,6 +23,7 @@ contract Harvest {
   address public owner;
   address public pendingOwner;
   IERC20 public dmtToken;
+  bool public pause;
 
   struct Data {
     uint256 fundRate;
@@ -64,9 +65,15 @@ contract Harvest {
     _;
   }
 
+  modifier onlyValidState() {
+    require(!pause, "has paused");
+    _;
+  }
+
   constructor(IERC20 _dmtToken) public {
     dmtToken = _dmtToken;
     owner = msg.sender;
+    pause = false;
 
     emit NewOwner(address(0), owner);
   }
@@ -86,6 +93,10 @@ contract Harvest {
     pendingOwner = address(0);
 
     emit NewOwner(old, owner);
+  }
+
+  function setPause(bool _pause) external onlyOwner {
+    pause = _pause;
   }
 
   // 添加投资人（钱包地址，分配比例、区块高度）
@@ -130,7 +141,7 @@ contract Harvest {
   }
 
   // 投资人领取收益
-  function claim() external onlyFunder() {
+  function claim() external onlyFunder onlyValidState {
 
     Data storage funder = funders[msg.sender];
     uint256 contract_balance = dmtToken.balanceOf( address(this) );
