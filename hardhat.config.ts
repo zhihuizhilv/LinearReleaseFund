@@ -21,6 +21,11 @@ export default {
       url: process.env.HARDHAT_RPC || "https://http-mainnet.hecochain.com",
       gas: 8000000,
       accounts: [process.env.HARDHAT_PRIKEY]
+    },
+    bsc: {
+      url: process.env.HARDHAT_RPC || "https://bsc-dataseed.binance.org/",
+      gas: 8000000,
+      accounts: [process.env.HARDHAT_PRIKEY]
     }
   },
   solidity: {
