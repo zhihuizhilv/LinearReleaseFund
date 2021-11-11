@@ -15,7 +15,7 @@ module.exports = {
     },
 
     bsc: {
-        totalReward: ethers.utils.parseEther("50000000"),   // 总分发额度
+        totalReward: ethers.utils.parseEther("49041098"),   // 总分发额度
         totalDays: 311,                                     // 领取总天数
         DMT: "0x3Eb05a201817F87C198930B86F40C6829340b4B7",
     },

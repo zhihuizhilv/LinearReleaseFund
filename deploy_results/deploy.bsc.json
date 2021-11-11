@@ -129,7 +129,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -142,7 +142,7 @@
         "name": "acceptOwner",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": []
       },
@@ -151,7 +151,7 @@
         "name": "addFunder",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "address",
@@ -169,7 +169,7 @@
         "name": "claim",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": []
       },
@@ -178,7 +178,7 @@
         "name": "delFunder",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "address",
@@ -193,7 +193,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -207,7 +207,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "address"
@@ -234,7 +234,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -248,7 +248,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -262,7 +262,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -276,7 +276,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -290,7 +290,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "address",
@@ -314,7 +314,7 @@
         "name": "setPause",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "bool",
@@ -328,7 +328,7 @@
         "name": "setPendingOwner",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "address",
@@ -343,7 +343,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [],
         "outputs": [
           {
@@ -356,7 +356,7 @@
         "name": "withdraw",
         "constant": false,
         "payable": false,
-        "gas": 0,
+        "gas": 7000000,
         "inputs": [
           {
             "type": "address",
@@ -377,12 +377,12 @@
   },
   "deployedContract": {
     "harvest": {
-      "address": "0x246736547441481B1167Ebb0FB780B9F706C5075",
+      "address": "0x4801119184C431bd1Ff0Ad372a8af08D74686a71",
       "contractName": "Harvest",
       "_dmtToken": "0x3Eb05a201817F87C198930B86F40C6829340b4B7",
       "_totalReward": {
         "type": "BigNumber",
-        "hex": "0x295be96e64066972000000"
+        "hex": "0x2890db3fe7fef28ce80000"
       },
       "_totalDays": 311
     }
