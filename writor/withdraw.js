@@ -23,7 +23,7 @@ async function main() {
     await deployResult.load();
 
     let dmt = "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12";
-    let amount = ethers.utils.formatEther("7890640.10483333334811576");
+    let amount = ethers.utils.parseEther("7890640.10483333334811576");
     await withdraw(deployer, dmt, amount);
 }
 

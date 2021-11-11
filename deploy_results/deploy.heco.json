@@ -8,6 +8,14 @@
           {
             "type": "address",
             "name": "_dmtToken"
+          },
+          {
+            "type": "uint256",
+            "name": "_totalReward"
+          },
+          {
+            "type": "uint256",
+            "name": "_totalDays"
           }
         ]
       },
@@ -222,20 +230,6 @@
       },
       {
         "type": "function",
-        "name": "leftBlocks",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "gas": 7000000,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
-          }
-        ]
-      },
-      {
-        "type": "function",
         "name": "owner",
         "constant": true,
         "stateMutability": "view",
@@ -245,6 +239,20 @@
         "outputs": [
           {
             "type": "address"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "pause",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "gas": 7000000,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "bool"
           }
         ]
       },
@@ -303,6 +311,20 @@
       },
       {
         "type": "function",
+        "name": "setPause",
+        "constant": false,
+        "payable": false,
+        "gas": 7000000,
+        "inputs": [
+          {
+            "type": "bool",
+            "name": "_pause"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
         "name": "setPendingOwner",
         "constant": false,
         "payable": false,
@@ -355,9 +377,14 @@
   },
   "deployedContract": {
     "harvest": {
-      "address": "0x246736547441481B1167Ebb0FB780B9F706C5075",
+      "address": "0x498Fb7E6F07A088D61b4c8E33813B894a586E73f",
       "contractName": "Harvest",
-      "_dmtToken": "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12"
+      "_dmtToken": "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12",
+      "_totalReward": {
+        "type": "BigNumber",
+        "hex": "0x1d1f0ea133933f11200000"
+      },
+      "_totalDays": 311
     }
   }
 }
