@@ -10,26 +10,23 @@ contract Harvest2 {
   using SafeERC20 for IERC20;
   using SafeMath for uint256;
 
-  // 总量剩余量，直到领取完全结束
+  // 总量
   uint256 public immutable MaxReward;
 
-  // 每个季度百分之一能获得的收益额度
-  uint256 public rewardRate;
-
+  // 百分比
   uint256 public totalRate;
 
   address public owner;
   address public pendingOwner;
   IERC20 public dmtToken;
   bool public pause;
-  bool public onlyOnceAirdrop;
 
   // 每个季度区块高度
-  uint public perSeasonBlocks = 1 years / 4 / 3;
-  uint public seasonBlocks1 = perSeasonBlocks * 1;
-  uint public seasonBlocks2 = perSeasonBlocks * 2;
-  uint public seasonBlocks3 = perSeasonBlocks * 3;
-  uint public seasonBlocks4 = perSeasonBlocks * 4;
+  uint private perSeasonBlocks = 1 years / 4 / 3;
+  uint private seasonBlocks1 = perSeasonBlocks * 1;
+  uint private seasonBlocks2 = perSeasonBlocks * 2;
+  uint private seasonBlocks3 = perSeasonBlocks * 3;
+  uint private seasonBlocks4 = perSeasonBlocks * 4;
 
   struct Data {
     uint256 fundRate;
@@ -45,15 +42,11 @@ contract Harvest2 {
 
   event NewPendingOwner(address indexed pendingOwner);
 
-  event RewardRateUpdated(uint256 rewardRate);
-
   event NewFunder(address indexed funder, uint256 fundRate);
 
   event RemoveFunder(address indexed funder);
 
   event TokensClaimed(address indexed funder, uint256 amount);
-
-  event TokensWithdraw(address indexed dst, uint256 contract_balance);
 
   // 仅管理员操作
   modifier onlyOwner() {
@@ -85,13 +78,11 @@ contract Harvest2 {
     _;
   }
 
-  constructor(IERC20 _dmtToken, uint _totalReward, uint _totalDays) public {
+  constructor(IERC20 _dmtToken, uint _totalReward) public {
     MaxReward = _totalReward;
     dmtToken = _dmtToken;
     owner = msg.sender;
     pause = false;
-
-    rewardRate = _totalReward / 4 / 100;
 
     emit NewOwner(address(0), owner);
   }
