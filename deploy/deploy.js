@@ -19,18 +19,33 @@ async function main() {
 
     await deployResult.load();
 
-    let HarvestFactory = await ethers.getContractFactory("Harvest");
-    let harvest = await HarvestFactory.deploy(deployConfig.DMT, deployConfig.totalReward, deployConfig.totalDays);
+    // let HarvestFactory = await ethers.getContractFactory("Harvest");
+    // let harvest = await HarvestFactory.deploy(deployConfig.DMT, deployConfig.totalReward, deployConfig.totalDays);
+    // await harvest.deployed();
+    // deployResult.writeAbi("Harvest", HarvestFactory);
+    // deployResult.writeDeployedContract(
+    //   "harvest",
+    //   harvest.address,
+    //   "Harvest",
+    //   {
+    //       _dmtToken: deployConfig.DMT,
+    //       _totalReward: deployConfig.totalReward,
+    //       _totalDays: deployConfig.totalDays,
+    //   }
+    // );
+
+    // Pacific
+    let HarvestFactory = await ethers.getContractFactory("Harvest2");
+    let harvest = await HarvestFactory.deploy(deployConfig.DMT, deployConfig.totalReward);
     await harvest.deployed();
     deployResult.writeAbi("Harvest", HarvestFactory);
     deployResult.writeDeployedContract(
       "harvest",
       harvest.address,
-      "Harvest",
+      "Harvest2",
       {
           _dmtToken: deployConfig.DMT,
-          _totalReward: deployConfig.totalReward,
-          _totalDays: deployConfig.totalDays,
+          _totalReward: deployConfig.totalReward
       }
     );
 

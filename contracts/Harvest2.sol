@@ -22,11 +22,12 @@ contract Harvest2 {
   bool public pause;
 
   // 每个季度区块高度
-  uint private perSeasonBlocks = 1 years / 4 / 3;
-  uint private seasonBlocks1 = perSeasonBlocks * 1;
-  uint private seasonBlocks2 = perSeasonBlocks * 2;
-  uint private seasonBlocks3 = perSeasonBlocks * 3;
-  uint private seasonBlocks4 = perSeasonBlocks * 4;
+  // uint256 private perSeasonBlocks = 1 years * 1 / 4 / 3;
+  uint256 private perSeasonBlocks = 1 days * 365 / 4 / 3;
+  uint256 private seasonBlocks1 = perSeasonBlocks * 1;
+  uint256 private seasonBlocks2 = perSeasonBlocks * 2;
+  uint256 private seasonBlocks3 = perSeasonBlocks * 3;
+  uint256 private seasonBlocks4 = perSeasonBlocks * 4;
 
   struct Data {
     uint256 fundRate;
@@ -143,7 +144,7 @@ contract Harvest2 {
   }
 
   // 更新投资人总领取额度
-  function updateFunderAmount(address _funder) private returns (uint256, uint256, uint256) {
+  function getFunderAmount(address _funder) private view returns (uint256) {
     Data storage funder = funders[_funder];
 
     // 每个季度释放20%，共4次
@@ -157,33 +158,38 @@ contract Harvest2 {
 
     // 第1季度时
     if ( diffBlock >= seasonBlocks1 && diffBlock < seasonBlocks2 ) {
-      funder.totalAmount = selfSeasonAmount.mul(2);
+      // funder.totalAmount = selfSeasonAmount.mul(2);
+      return selfSeasonAmount.mul(2);
     } 
     // 第2季度时
     else if(diffBlock >= seasonBlocks2 && diffBlock < seasonBlocks3 ) {
-      funder.totalAmount = selfSeasonAmount.mul(3);
+      // funder.totalAmount = selfSeasonAmount.mul(3);
+      return selfSeasonAmount.mul(3);
     }
     // 第3季度时
     else if(diffBlock >= seasonBlocks3 && diffBlock < seasonBlocks4 ) {
-      funder.totalAmount = selfSeasonAmount.mul(4);
+      // funder.totalAmount = selfSeasonAmount.mul(4);
+      return selfSeasonAmount.mul(4);
     }
     // 第4季度时
     else if(diffBlock >= seasonBlocks4) {
-      funder.totalAmount = selfSeasonAmount.mul(5);
+      // funder.totalAmount = selfSeasonAmount.mul(5);
+      return selfSeasonAmount.mul(5);
     }
   }
 
   // 获取投资人相关数据
-  function selfData(address _funder) external view returns (uint256, uint256, uint256) {
+  function selfData(address _funder) external view returns (uint256, uint256, uint256, uint256) {
     Data storage funder = funders[_funder];
 
-    updateFunderAmount(_funder);
+    // updateFunderAmount(_funder);
 
     // 最多领取收益数
     uint256 self_max_reward = MaxReward.div(100).mul(funder.fundRate);
 
     // 当前总收益数
-    uint256 self_total_reward = funder.totalAmount;
+    // uint256 self_total_reward = funder.totalAmount;
+    uint256 self_total_reward = getFunderAmount(_funder);
 
     // 已领取收益总数
     uint256 self_total_claimed = funder.totalClaimed;
@@ -201,10 +207,11 @@ contract Harvest2 {
 
     Data storage funder = funders[msg.sender];
 
-    updateFunderAmount(msg.sender);
+    // updateFunderAmount(msg.sender);
 
     // 当前总收益数
-    uint256 self_total_reward = funder.totalAmount;
+    // uint256 self_total_reward = funder.totalAmount;
+    uint256 self_total_reward = getFunderAmount(msg.sender);
 
     // 已领取收益总数
     uint256 self_total_claimed = funder.totalClaimed;

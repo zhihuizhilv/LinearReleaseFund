@@ -17,6 +17,11 @@ export default {
       blockGasLimit: 25000000,
       gas: "auto",
     },
+    rinkeby: {
+      url: 'https://eth-rinkeby.alchemyapi.io/v2/iLmZD1YJlEKWWEVgKMbrUllrFezOFbb7',
+      gas: "auto",
+      accounts: [process.env.HARDHAT_PRIKEY]
+    },
     heco: {
       url: process.env.HARDHAT_RPC || "https://http-mainnet.hecochain.com",
       gas: 8000000,
@@ -41,4 +46,12 @@ export default {
     outDir: "types",
     target: "ethers-v5"
   },
+  etherscan: {
+    // ======= Bsc =======
+    // apiKey: 'APTN9SV7SX42MACATNQF6AGNNTN6H17IU4'
+    // ======= Heco =======
+    // apiKey: 'VDPJ2BPE4NEP1SBZZEDXIQJXJR1ZSDGWCU'
+    // ======= Eth =======
+    apiKey: 'SAEBBHC93CEZ82GK676USUS24CX58KMG58'
+},
 };
