@@ -21,20 +21,10 @@ contract Harvest2 {
   IERC20 public dmtToken;
   bool public pause;
 
-  // 每个季度区块高度
-  // uint256 private perSeasonBlocks = 1 years * 1 / 4 / 3;
-  uint256 private perSeasonBlocks = 1 days * 365 / 4 / 3;
-  uint256 private seasonBlocks1 = perSeasonBlocks * 1;
-  uint256 private seasonBlocks2 = perSeasonBlocks * 2;
-  uint256 private seasonBlocks3 = perSeasonBlocks * 3;
-  uint256 private seasonBlocks4 = perSeasonBlocks * 4;
-
   struct Data {
     uint256 fundRate;
-    uint256 totalAmount;
     uint256 totalClaimed;
     uint256 lastBlock;
-    bool airdrop;
   }
 
   mapping(address => Data) public funders;
@@ -69,13 +59,6 @@ contract Harvest2 {
 
   modifier onlyValidState() {
     require(!pause, "has paused");
-    _;
-  }
-
-  // 只能执行一次
-  modifier onlyOnce(address _funder) {
-    Data storage funder = funders[_funder];
-    require(!funder.airdrop, "It can only be executed once");
     _;
   }
 
@@ -118,10 +101,8 @@ contract Harvest2 {
     Data storage funder = funders[_funder];
 
     funder.fundRate = _fundRate;
-    funder.totalAmount = 0;
     funder.totalClaimed = 0;
     funder.lastBlock = block.number;
-    funder.airdrop = false;
 
     totalRate = totalRate.add(_fundRate);
     emit NewFunder(_funder, _fundRate);
@@ -135,17 +116,16 @@ contract Harvest2 {
     emit RemoveFunder(_funder);
   }
 
-  // 首次释放，只能执行一次（总金额的20%乘以各自比例）
-  function firstRelease(address _funder) external onlyOwner onlyOnce(_funder) {
-    Data storage funder = funders[msg.sender];
-    uint256 firstReward = MaxReward.div(100).mul(20);
-    funder.totalAmount = firstReward.div(100).mul(funder.fundRate);
-    funder.airdrop = true;
-  }
-
-  // 更新投资人总领取额度
+  // 获取投资人总领取额度
   function getFunderAmount(address _funder) private view returns (uint256) {
     Data storage funder = funders[_funder];
+
+    // 每个季度区块高度
+    uint256 perSeasonBlocks = 1 days * 365 / 4 / 3;
+    uint256 seasonBlocks1 = perSeasonBlocks * 1;
+    uint256 seasonBlocks2 = perSeasonBlocks * 2;
+    uint256 seasonBlocks3 = perSeasonBlocks * 3;
+    uint256 seasonBlocks4 = perSeasonBlocks * 4;
 
     // 每个季度释放20%，共4次
     uint256 seasonReward = MaxReward.div(100).mul(20);
@@ -158,23 +138,23 @@ contract Harvest2 {
 
     // 第1季度时
     if ( diffBlock >= seasonBlocks1 && diffBlock < seasonBlocks2 ) {
-      // funder.totalAmount = selfSeasonAmount.mul(2);
       return selfSeasonAmount.mul(2);
     } 
     // 第2季度时
     else if(diffBlock >= seasonBlocks2 && diffBlock < seasonBlocks3 ) {
-      // funder.totalAmount = selfSeasonAmount.mul(3);
       return selfSeasonAmount.mul(3);
     }
     // 第3季度时
     else if(diffBlock >= seasonBlocks3 && diffBlock < seasonBlocks4 ) {
-      // funder.totalAmount = selfSeasonAmount.mul(4);
       return selfSeasonAmount.mul(4);
     }
     // 第4季度时
     else if(diffBlock >= seasonBlocks4) {
-      // funder.totalAmount = selfSeasonAmount.mul(5);
       return selfSeasonAmount.mul(5);
+    }
+    // 布署时释放20%
+    else{
+      return selfSeasonAmount.mul(1);
     }
   }
 
@@ -182,13 +162,10 @@ contract Harvest2 {
   function selfData(address _funder) external view returns (uint256, uint256, uint256, uint256) {
     Data storage funder = funders[_funder];
 
-    // updateFunderAmount(_funder);
-
     // 最多领取收益数
     uint256 self_max_reward = MaxReward.div(100).mul(funder.fundRate);
 
     // 当前总收益数
-    // uint256 self_total_reward = funder.totalAmount;
     uint256 self_total_reward = getFunderAmount(_funder);
 
     // 已领取收益总数
@@ -207,10 +184,7 @@ contract Harvest2 {
 
     Data storage funder = funders[msg.sender];
 
-    // updateFunderAmount(msg.sender);
-
     // 当前总收益数
-    // uint256 self_total_reward = funder.totalAmount;
     uint256 self_total_reward = getFunderAmount(msg.sender);
 
     // 已领取收益总数
@@ -220,8 +194,6 @@ contract Harvest2 {
     uint256 amount = self_total_reward.sub(self_total_claimed);
 
     require(amount > 0 ,"Your receivable income is zero");
-
-    require(self_total_claimed <= self_total_reward ,"Can't exceed your total amount");
 
     // 本次领取收益 大于 合约余额时
     if(amount > contract_balance){
