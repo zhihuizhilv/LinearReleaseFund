@@ -5,16 +5,15 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
+// Pacific项目投资人释放
 contract Harvest {
   using SafeERC20 for IERC20;
   using SafeMath for uint256;
 
-  // 总量剩余量，直到领取完全结束
+  // 总量
   uint256 public immutable MaxReward;
 
-  // 每个区块百分之一能获得的收益额度
-  uint256 public immutable rewardRate;
-
+  // 百分比
   uint256 public totalRate;
 
   address public owner;
@@ -34,15 +33,11 @@ contract Harvest {
 
   event NewPendingOwner(address indexed pendingOwner);
 
-  event RewardRateUpdated(uint256 rewardRate);
-
   event NewFunder(address indexed funder, uint256 fundRate);
 
   event RemoveFunder(address indexed funder);
 
   event TokensClaimed(address indexed funder, uint256 amount);
-
-  event TokensWithdraw(address indexed dst, uint256 contract_balance);
 
   // 仅管理员操作
   modifier onlyOwner() {
@@ -67,14 +62,11 @@ contract Harvest {
     _;
   }
 
-  constructor(IERC20 _dmtToken, uint _totalReward, uint _totalDays) public {
+  constructor(IERC20 _dmtToken, uint _totalReward) public {
     MaxReward = _totalReward;
     dmtToken = _dmtToken;
     owner = msg.sender;
     pause = false;
-
-    uint totalBlocks = 1 days * _totalDays / 3;
-    rewardRate = _totalReward / 100 / totalBlocks;
 
     emit NewOwner(address(0), owner);
   }
@@ -124,46 +116,92 @@ contract Harvest {
     emit RemoveFunder(_funder);
   }
 
+  // 获取投资人总领取额度
+  function getFunderAmount(address _funder) private view returns (uint256) {
+    Data storage funder = funders[_funder];
+
+    // 每个季度区块高度
+    // uint256 perSeasonBlocks = 1 days * 365 / 4 / 3;
+    uint256 perSeasonBlocks = 1 hours / 4 / 3;
+    uint256 seasonBlocks1 = perSeasonBlocks * 1;
+    uint256 seasonBlocks2 = perSeasonBlocks * 2;
+    uint256 seasonBlocks3 = perSeasonBlocks * 3;
+    uint256 seasonBlocks4 = perSeasonBlocks * 4;
+
+    // 每个季度释放20%，共4次
+    uint256 seasonReward = MaxReward.div(100).mul(20);
+
+    // 该投资人每个季度释放额度
+    uint256 selfSeasonAmount = seasonReward.div(100).mul(funder.fundRate);
+
+    // 创建时到当前区块高度的差值
+    uint256 diffBlock = block.number.sub(funder.lastBlock);
+
+    // 第1季度时
+    if ( diffBlock >= seasonBlocks1 && diffBlock < seasonBlocks2 ) {
+      return selfSeasonAmount.mul(2);
+    } 
+    // 第2季度时
+    else if(diffBlock >= seasonBlocks2 && diffBlock < seasonBlocks3 ) {
+      return selfSeasonAmount.mul(3);
+    }
+    // 第3季度时
+    else if(diffBlock >= seasonBlocks3 && diffBlock < seasonBlocks4 ) {
+      return selfSeasonAmount.mul(4);
+    }
+    // 第4季度时
+    else if(diffBlock >= seasonBlocks4) {
+      return selfSeasonAmount.mul(5);
+    }
+    // 布署时释放20%
+    else{
+      return selfSeasonAmount.mul(1);
+    }
+  }
+
   // 获取投资人相关数据
-  function selfData(address _funder) external view returns (uint256, uint256, uint256) {
+  function selfData(address _funder) external view returns (uint256, uint256, uint256, uint256) {
     Data storage funder = funders[_funder];
 
     // 最多领取收益数
     uint256 self_max_reward = MaxReward.div(100).mul(funder.fundRate);
 
+    // 当前总收益数
+    uint256 self_total_reward = getFunderAmount(_funder);
+
+    // 已领取收益总数
+    uint256 self_total_claimed = funder.totalClaimed;
+
     // 未领取的收益数总数
-    uint256 self_max_unclaimed = self_max_reward.sub(funder.totalClaimed);
+    uint256 self_total_unclaimed = self_total_reward.sub(self_total_claimed);
 
-    // 当前可以领取的收益数
-    uint256 diffBlock = block.number.sub(funder.lastBlock);
-    uint256 self_active_reward = rewardRate.mul(funder.fundRate).mul(diffBlock);
-
-    return (self_max_reward, self_max_unclaimed, self_active_reward);
+    return (self_max_reward, self_total_reward, self_total_claimed, self_total_unclaimed);
   }
 
   // 投资人领取收益
   function claim() external onlyFunder onlyValidState {
 
-    Data storage funder = funders[msg.sender];
     uint256 contract_balance = dmtToken.balanceOf( address(this) );
 
-    uint256 totalUnclaimed = MaxReward.div(100).mul(funder.fundRate).sub(funder.totalClaimed);
-    uint256 diffBlock = block.number.sub(funder.lastBlock);
-    uint256 amount = rewardRate.mul(funder.fundRate).mul(diffBlock);
+    Data storage funder = funders[msg.sender];
 
-    // 本次领取收益 大于 剩余领取收益总额
-    if(amount > totalUnclaimed){
-      amount = totalUnclaimed;
-    }
+    // 当前总收益数
+    uint256 self_total_reward = getFunderAmount(msg.sender);
 
+    // 已领取收益总数
+    uint256 self_total_claimed = funder.totalClaimed;
+
+    // 未领取的收益数总数
+    uint256 amount = self_total_reward.sub(self_total_claimed);
+
+    require(amount > 0 ,"Your receivable income is zero");
+
+    // 本次领取收益 大于 合约余额时
     if(amount > contract_balance){
       amount = contract_balance;
     }
 
-    require(amount > 0 ,"Your receivable income is zero");
-
     funder.totalClaimed = funder.totalClaimed.add(amount);
-    funder.lastBlock = block.number;
 
     dmtToken.safeTransfer(msg.sender, amount);
 
