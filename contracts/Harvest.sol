@@ -121,8 +121,9 @@ contract Harvest {
     Data storage funder = funders[_funder];
 
     // 每个季度区块高度
-    // uint256 perSeasonBlocks = 1 days * 365 / 4 / 3;
-    uint256 perSeasonBlocks = 1 hours / 4 / 3;
+    uint256 perSeasonBlocks = 1 days * 365 / 4 / 3;
+    // 测试时用
+    // uint256 perSeasonBlocks = 1 hours / 4 / 3;
     uint256 seasonBlocks1 = perSeasonBlocks * 1;
     uint256 seasonBlocks2 = perSeasonBlocks * 2;
     uint256 seasonBlocks3 = perSeasonBlocks * 3;
@@ -195,6 +196,8 @@ contract Harvest {
     uint256 amount = self_total_reward.sub(self_total_claimed);
 
     require(amount > 0 ,"Your receivable income is zero");
+
+    require(contract_balance > 0 ,"Insufficient contract balance");
 
     // 本次领取收益 大于 合约余额时
     if(amount > contract_balance){

@@ -156,7 +156,18 @@ describe("Harvest", function () {
             console.log("已领取收益总数", selfDate[2].toString());
             console.log("未领取的收益总数", selfDate[3].toString());
 
+            // 继续增加300个区块
+            for (let i = 0; i < 900; i++) {
+                await network.provider.send("evm_mine");
+            }
+            // console.log("\n继续增加300个区块\n");
+            console.log("\n================ 布署后投资人信息（第5季度） ================\n");
 
+            selfDate = await harvest.selfData(await user.getAddress());
+            console.log("最多领取收益数", selfDate[0].toString());
+            console.log("当前总收益数", selfDate[1].toString());
+            console.log("已领取收益总数", selfDate[2].toString());
+            console.log("未领取的收益总数", selfDate[3].toString());
 
 
 
