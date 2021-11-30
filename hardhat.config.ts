@@ -36,6 +36,7 @@ export default {
     eth: {
       url: process.env.HARDHAT_RPC || "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
       gas: 15000000,
+      gasPrice: 110000000000, // 110GWei
       accounts: [process.env.HARDHAT_PRIKEY]
     }
   },
