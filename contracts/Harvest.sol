@@ -86,17 +86,23 @@ contract Harvest {
   }
 
   // 添加投资人（钱包地址，分配总额、区块高度）
-  function addFunder(address _funder, uint256 _totalToken) external onlyOwner {
-    require(funders[_funder].lastBlock == 0, "funder exist already");
-    require(_totalToken > 0, "invalid num");
+  function addFunder(address[] calldata _funders, uint256[] calldata _amounts) external onlyOwner {
+    require(_funders.length == _amounts.length, "invalid input params length");
+    for (uint i = 0; i < _funders.length; i++) {
+      address _funder = _funders[i];
+      uint _amount = _amounts[i];
 
-    Data storage funder = funders[_funder];
+      require(funders[_funder].lastBlock == 0, "funder exist already");
+      require(_amount > 0, "invalid funder amount");
 
-    funder.totalToken = _totalToken;
-    funder.totalClaimed = 0;
-    funder.lastBlock = block.number;
+      Data storage funder = funders[_funder];
 
-    emit NewFunder(_funder, _totalToken);
+      funder.totalToken = _amount;
+      funder.totalClaimed = 0;
+      funder.lastBlock = block.number;
+
+      emit NewFunder(_funder, _amount);
+    }
   }
 
   // 删除投资人

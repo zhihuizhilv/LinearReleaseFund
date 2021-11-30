@@ -1,5 +1,259 @@
 {
   "abi": {
+    "ERC20Mock": [
+      {
+        "type": "constructor",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "string",
+            "name": "_name"
+          },
+          {
+            "type": "string",
+            "name": "_symbol"
+          },
+          {
+            "type": "uint8",
+            "name": "_decimals"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Approval",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "owner",
+            "indexed": true
+          },
+          {
+            "type": "address",
+            "name": "spender",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "value",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Transfer",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "from",
+            "indexed": true
+          },
+          {
+            "type": "address",
+            "name": "to",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "value",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "allowance",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address"
+          },
+          {
+            "type": "address"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "approve",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_spender"
+          },
+          {
+            "type": "uint256",
+            "name": "_value"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "balanceOf",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "burn",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_account"
+          },
+          {
+            "type": "uint256",
+            "name": "_amount"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "decimals",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint8"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "mint",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_recipient"
+          },
+          {
+            "type": "uint256",
+            "name": "_amount"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "name",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "symbol",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "totalSupply",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint256"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "transfer",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_to"
+          },
+          {
+            "type": "uint256",
+            "name": "_value"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "transferFrom",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_from"
+          },
+          {
+            "type": "address",
+            "name": "_to"
+          },
+          {
+            "type": "uint256",
+            "name": "_value"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "bool"
+          }
+        ]
+      }
+    ],
     "Harvest": [
       {
         "type": "constructor",
@@ -8,14 +262,6 @@
           {
             "type": "address",
             "name": "_dmtToken"
-          },
-          {
-            "type": "uint256",
-            "name": "_totalReward"
-          },
-          {
-            "type": "uint256",
-            "name": "_totalDays"
           }
         ]
       },
@@ -31,7 +277,7 @@
           },
           {
             "type": "uint256",
-            "name": "fundRate",
+            "name": "totalToken",
             "indexed": false
           }
         ]
@@ -80,18 +326,6 @@
       {
         "type": "event",
         "anonymous": false,
-        "name": "RewardRateUpdated",
-        "inputs": [
-          {
-            "type": "uint256",
-            "name": "rewardRate",
-            "indexed": false
-          }
-        ]
-      },
-      {
-        "type": "event",
-        "anonymous": false,
         "name": "TokensClaimed",
         "inputs": [
           {
@@ -103,36 +337,6 @@
             "type": "uint256",
             "name": "amount",
             "indexed": false
-          }
-        ]
-      },
-      {
-        "type": "event",
-        "anonymous": false,
-        "name": "TokensWithdraw",
-        "inputs": [
-          {
-            "type": "address",
-            "name": "dst",
-            "indexed": true
-          },
-          {
-            "type": "uint256",
-            "name": "contract_balance",
-            "indexed": false
-          }
-        ]
-      },
-      {
-        "type": "function",
-        "name": "MaxReward",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
           }
         ]
       },
@@ -151,12 +355,12 @@
         "payable": false,
         "inputs": [
           {
-            "type": "address",
-            "name": "_funder"
+            "type": "address[]",
+            "name": "_funders"
           },
           {
-            "type": "uint256",
-            "name": "_fundRate"
+            "type": "uint256[]",
+            "name": "_amounts"
           }
         ],
         "outputs": []
@@ -209,7 +413,7 @@
         "outputs": [
           {
             "type": "uint256",
-            "name": "fundRate"
+            "name": "totalToken"
           },
           {
             "type": "uint256",
@@ -262,19 +466,6 @@
       },
       {
         "type": "function",
-        "name": "rewardRate",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
-          }
-        ]
-      },
-      {
-        "type": "function",
         "name": "selfData",
         "constant": true,
         "stateMutability": "view",
@@ -286,6 +477,9 @@
           }
         ],
         "outputs": [
+          {
+            "type": "uint256"
+          },
           {
             "type": "uint256"
           },
@@ -325,19 +519,6 @@
       },
       {
         "type": "function",
-        "name": "totalRate",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
-          }
-        ]
-      },
-      {
-        "type": "function",
         "name": "withdraw",
         "constant": false,
         "payable": false,
@@ -360,15 +541,17 @@
     ]
   },
   "deployedContract": {
+    "erc20Mock": {
+      "address": "0xbEB25Af93BF799F2f991ffEB2d0F4D4bA1cA4354",
+      "contractName": "ERC20Mock",
+      "_name": "mock token",
+      "_symbol": "MT",
+      "_decimals": 18
+    },
     "harvest": {
-      "address": "0x7C98a3B1445b4997a07785D22ED1f7712B7E6c28",
+      "address": "0x4Be74B253F00c9f2218a080714abBBcB38060FF9",
       "contractName": "Harvest",
-      "_dmtToken": "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12",
-      "_totalReward": {
-        "type": "BigNumber",
-        "hex": "0x1d1f0ea133933f11200000"
-      },
-      "_totalDays": 311
+      "_dmtToken": "0xbEB25Af93BF799F2f991ffEB2d0F4D4bA1cA4354"
     }
   }
 }

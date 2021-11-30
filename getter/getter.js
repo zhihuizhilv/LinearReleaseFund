@@ -32,8 +32,8 @@ async function getHarvestInfo() {
     console.log("harvest.rewardRate:", ethers.utils.formatEther(await harvest.rewardRate()));
     for (let i = 0; i < funders.length; i++) {
         let state = await harvest.selfData(funders[i]);
-        // console.log(funders[i], 'self_max_reward:', ethers.utils.formatEther(state[0]), 'self_max_unclaimed:', ethers.utils.formatEther(state[1]), 'self_active_reward:', ethers.utils.formatEther(state[2]));
-        console.log(funders[i], 'totalClaimed:', ethers.utils.formatEther((await harvest.funders(funders[i])).totalClaimed));
+        console.log(funders[i], 'self_max_reward:', ethers.utils.formatEther(state[0]), 'self_max_unclaimed:', ethers.utils.formatEther(state[1]), 'self_active_reward:', ethers.utils.formatEther(state[2]));
+        // console.log(funders[i], 'totalClaimed:', ethers.utils.formatEther((await harvest.funders(funders[i])).totalClaimed));
     }
 }
 

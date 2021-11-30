@@ -3,9 +3,7 @@ const ethers = hre.ethers;
 
 module.exports = {
     local: {
-        totalReward: ethers.utils.parseEther("35205512"),   // 总分发额度
-        totalDays: 311,                                     // 领取总天数
-        DMT: "0x57A7BcdfAb1631ACA9d6E0f39959477182CfAe12",
+        token: "0xbEB25Af93BF799F2f991ffEB2d0F4D4bA1cA4354",
     },
 
     heco: {
@@ -18,6 +16,10 @@ module.exports = {
         totalReward: ethers.utils.parseEther("49041098"),   // 总分发额度
         totalDays: 311,                                     // 领取总天数
         DMT: "0x3Eb05a201817F87C198930B86F40C6829340b4B7",
+    },
+
+    eth: {
+        token: "0x6a969D379700B2E5EA4E684d273d63C1c050Ba49",
     },
 
     rinkeby: {

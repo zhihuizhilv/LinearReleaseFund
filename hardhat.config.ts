@@ -32,6 +32,11 @@ export default {
       url: process.env.HARDHAT_RPC || "https://bsc-dataseed.binance.org/",
       gas: 8000000,
       accounts: [process.env.HARDHAT_PRIKEY]
+    },
+    eth: {
+      url: process.env.HARDHAT_RPC || "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+      gas: 15000000,
+      accounts: [process.env.HARDHAT_PRIKEY]
     }
   },
   solidity: {
