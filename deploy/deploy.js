@@ -14,6 +14,9 @@ const deployConfig = require('./deploy_config')[hre.network.name];
 async function main() {
     // 投资人列表
     const funders = {
+      '0x145FF683e85F289FAB329835926a16a8f57762C8': 1000,
+      '0x92f8CBAa319C12511cA67a4E457AD70585BECd2A': 500,
+
       '0x361512395edE20E475928e2b24a8107Fc47ddAB5': 7142857,
       '0x2461fb825A47FEd154776205842135972F4f4B88': 5619048,
       '0x0FEf682990c99003acf47CB9CD872b43544547c9': 9047619,
@@ -58,8 +61,6 @@ async function main() {
       '0x45C90Da6dC0B7D6282824E684492F48Cd50CA5DA': 2000000,
       '0xd8ea0E6eda44A1f393746fFa4D3E1e8Af30029D2': 4857143,
       '0x608772776AeaAc47db52f2Ff91D01F4ee222BfD3': 7142857,
-      '0x92f8CBAa319C12511cA67a4E457AD70585BECd2A': 500,
-      '0x145FF683e85F289FAB329835926a16a8f57762C8': 1000
     };
 
     const [deployer] = await ethers.getSigners();
@@ -105,8 +106,8 @@ async function main() {
     console.log("begin add funder.");
     for (const addr in funders) {
       const totalToken = funders[addr];
-      console.log(addr,totalToken);
-      await (await harvest.addFunder(addr, totalToken)).wait();
+      console.log(addr, totalToken, ethers.utils.parseEther(`${totalToken}`) );
+      await (await harvest.addFunder(addr, ethers.utils.parseEther(`${totalToken}`))).wait();
     }
     console.log("add funder end.");
 }

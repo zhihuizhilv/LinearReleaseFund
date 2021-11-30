@@ -318,7 +318,7 @@
   },
   "deployedContract": {
     "harvest": {
-      "address": "0x054504C661c73eE9b56b8C04F7e22757A7e318A6",
+      "address": "0x8A93286AD3C3c9877834fD73B81713A01b57ac67",
       "contractName": "Harvest",
       "_dmtToken": "0x17Ac041b33f14E76a6314e0d3cD8857D04C3c00e",
       "_totalReward": {
