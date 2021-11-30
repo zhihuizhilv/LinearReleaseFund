@@ -27,7 +27,7 @@
           },
           {
             "type": "uint256",
-            "name": "fundRate",
+            "name": "totalToken",
             "indexed": false
           }
         ]
@@ -123,7 +123,7 @@
           },
           {
             "type": "uint256",
-            "name": "_fundRate"
+            "name": "_totalToken"
           }
         ],
         "outputs": []
@@ -176,7 +176,7 @@
         "outputs": [
           {
             "type": "uint256",
-            "name": "fundRate"
+            "name": "totalToken"
           },
           {
             "type": "uint256",
@@ -318,9 +318,9 @@
   },
   "deployedContract": {
     "harvest": {
-      "address": "0xe61795A8DfdbEEb8D4695020d1DDA074987ad31E",
+      "address": "0x054504C661c73eE9b56b8C04F7e22757A7e318A6",
       "contractName": "Harvest",
-      "_dmtToken": "0x3Eb05a201817F87C198930B86F40C6829340b4B7",
+      "_dmtToken": "0x17Ac041b33f14E76a6314e0d3cD8857D04C3c00e",
       "_totalReward": {
         "type": "BigNumber",
         "hex": "0xd3c21bcecceda1000000"

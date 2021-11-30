@@ -22,6 +22,6 @@ module.exports = {
 
     rinkeby: {
         totalReward: ethers.utils.parseEther("1000000"),   // 总分发额度
-        DMT: "0x3Eb05a201817F87C198930B86F40C6829340b4B7",
+        DMT: "0x17Ac041b33f14E76a6314e0d3cD8857D04C3c00e",
     },
 }

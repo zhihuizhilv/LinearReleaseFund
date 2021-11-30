@@ -22,7 +22,7 @@ contract Harvest {
   bool public pause;
 
   struct Data {
-    uint256 fundRate;
+    uint256 totalToken;
     uint256 totalClaimed;
     uint256 lastBlock;
   }
@@ -33,7 +33,7 @@ contract Harvest {
 
   event NewPendingOwner(address indexed pendingOwner);
 
-  event NewFunder(address indexed funder, uint256 fundRate);
+  event NewFunder(address indexed funder, uint256 totalToken);
 
   event RemoveFunder(address indexed funder);
 
@@ -92,26 +92,23 @@ contract Harvest {
     pause = _pause;
   }
 
-  // 添加投资人（钱包地址，分配比例、区块高度）
-  function addFunder(address _funder, uint256 _fundRate) external onlyOwner {
+  // 添加投资人（钱包地址，分配总额、区块高度）
+  function addFunder(address _funder, uint256 _totalToken) external onlyOwner {
     require(funders[_funder].lastBlock == 0, "funder exist already");
-    require(_fundRate > 0, "invalid fund rate");
-    require(totalRate.add(_fundRate) <= 100, "total rate over");
+    require(_totalToken > 0, "invalid num");
 
     Data storage funder = funders[_funder];
 
-    funder.fundRate = _fundRate;
+    funder.totalToken = _totalToken;
     funder.totalClaimed = 0;
     funder.lastBlock = block.number;
 
-    totalRate = totalRate.add(_fundRate);
-    emit NewFunder(_funder, _fundRate);
+    emit NewFunder(_funder, _totalToken);
   }
 
   // 删除投资人
   function delFunder(address _funder) external onlyOwner {
     Data storage funder = funders[_funder];
-    totalRate = totalRate.sub(funder.fundRate);
     delete funders[_funder];
     emit RemoveFunder(_funder);
   }
@@ -129,17 +126,18 @@ contract Harvest {
     uint256 seasonBlocks3 = perSeasonBlocks * 3;
     uint256 seasonBlocks4 = perSeasonBlocks * 4;
 
-    // 每个季度释放20%，共4次
-    uint256 seasonReward = MaxReward.div(100).mul(20);
-
-    // 该投资人每个季度释放额度
-    uint256 selfSeasonAmount = seasonReward.div(100).mul(funder.fundRate);
+    // 该投资人每个季度释放额度（每个季度释放20%，共4次）
+    uint256 selfSeasonAmount = funder.totalToken.div(100).mul(20);
 
     // 创建时到当前区块高度的差值
     uint256 diffBlock = block.number.sub(funder.lastBlock);
 
+    // 默认布署后释放20%
+    if ( diffBlock < seasonBlocks1 ) {
+      return selfSeasonAmount.mul(1);
+    } 
     // 第1季度时
-    if ( diffBlock >= seasonBlocks1 && diffBlock < seasonBlocks2 ) {
+    else if ( diffBlock >= seasonBlocks1 && diffBlock < seasonBlocks2 ) {
       return selfSeasonAmount.mul(2);
     } 
     // 第2季度时
@@ -154,10 +152,6 @@ contract Harvest {
     else if(diffBlock >= seasonBlocks4) {
       return selfSeasonAmount.mul(5);
     }
-    // 布署时释放20%
-    else{
-      return selfSeasonAmount.mul(1);
-    }
   }
 
   // 获取投资人相关数据
@@ -165,7 +159,7 @@ contract Harvest {
     Data storage funder = funders[_funder];
 
     // 最多领取收益数
-    uint256 self_max_reward = MaxReward.div(100).mul(funder.fundRate);
+    uint256 self_max_reward = funder.totalToken;
 
     // 当前总收益数
     uint256 self_total_reward = getFunderAmount(_funder);
