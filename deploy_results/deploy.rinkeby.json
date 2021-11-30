@@ -8,10 +8,6 @@
           {
             "type": "address",
             "name": "_dmtToken"
-          },
-          {
-            "type": "uint256",
-            "name": "_totalReward"
           }
         ]
       },
@@ -87,19 +83,6 @@
             "type": "uint256",
             "name": "amount",
             "indexed": false
-          }
-        ]
-      },
-      {
-        "type": "function",
-        "name": "MaxReward",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
           }
         ]
       },
@@ -282,19 +265,6 @@
       },
       {
         "type": "function",
-        "name": "totalRate",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "uint256"
-          }
-        ]
-      },
-      {
-        "type": "function",
         "name": "withdraw",
         "constant": false,
         "payable": false,
@@ -318,13 +288,9 @@
   },
   "deployedContract": {
     "harvest": {
-      "address": "0x8A93286AD3C3c9877834fD73B81713A01b57ac67",
+      "address": "0x5D66994c963594dB4f23EA74Dc555B63C07aAdcd",
       "contractName": "Harvest",
-      "_dmtToken": "0x17Ac041b33f14E76a6314e0d3cD8857D04C3c00e",
-      "_totalReward": {
-        "type": "BigNumber",
-        "hex": "0xd3c21bcecceda1000000"
-      }
+      "_dmtToken": "0x17Ac041b33f14E76a6314e0d3cD8857D04C3c00e"
     }
   }
 }

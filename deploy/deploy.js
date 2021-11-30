@@ -87,7 +87,7 @@ async function main() {
 
     // Pacific
     let HarvestFactory = await ethers.getContractFactory("Harvest");
-    let harvest = await HarvestFactory.deploy(deployConfig.DMT, deployConfig.totalReward);
+    let harvest = await HarvestFactory.deploy(deployConfig.DMT);
     await harvest.deployed();
     deployResult.writeAbi("Harvest", HarvestFactory);
     deployResult.writeDeployedContract(
@@ -95,8 +95,7 @@ async function main() {
       harvest.address,
       "Harvest",
       {
-          _dmtToken: deployConfig.DMT,
-          _totalReward: deployConfig.totalReward
+          _dmtToken: deployConfig.DMT
       }
     );
 

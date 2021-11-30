@@ -10,12 +10,6 @@ contract Harvest {
   using SafeERC20 for IERC20;
   using SafeMath for uint256;
 
-  // 总量
-  uint256 public immutable MaxReward;
-
-  // 百分比
-  uint256 public totalRate;
-
   address public owner;
   address public pendingOwner;
   IERC20 public dmtToken;
@@ -62,8 +56,7 @@ contract Harvest {
     _;
   }
 
-  constructor(IERC20 _dmtToken, uint _totalReward) public {
-    MaxReward = _totalReward;
+  constructor(IERC20 _dmtToken) public {
     dmtToken = _dmtToken;
     owner = msg.sender;
     pause = false;
@@ -108,7 +101,6 @@ contract Harvest {
 
   // 删除投资人
   function delFunder(address _funder) external onlyOwner {
-    Data storage funder = funders[_funder];
     delete funders[_funder];
     emit RemoveFunder(_funder);
   }
